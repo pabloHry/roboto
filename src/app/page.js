@@ -1,95 +1,65 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { _post } from "@/utils/http";
+import {
+  Box,
+  VStack,
+  Input,
+  Button,
+  useColorModeValue,
+  Center,
+  Container,
+} from "@chakra-ui/react";
+import axios from "axios";
+import { useState } from "react";
 
 export default function Home() {
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const bgGradient = useColorModeValue(
+    "linear(to-r, yellow.200, purple.200)",
+    "linear(to-r, yellow.700, purple.700)"
+  );
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const response = await _post("/api/login/", {
+      login,
+      password,
+    });
+    console.log(response);
+  };
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
+    <Center h='100vh' bgGradient={bgGradient}>
+      <Container centerContent>
+        <form onSubmit={handleSubmit}>
+          <VStack
+            p={4}
+            w='100%'
+            maxW='md'
+            boxShadow='xl'
+            borderRadius='lg'
+            bg='white'
+            spacing={4}>
+            <Input
+              placeholder='Login'
+              value={login}
+              onChange={(e) => setLogin(e.target.value)}
             />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+            <Input
+              placeholder='Password'
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button colorScheme='teal' w='100%' type='submit'>
+              Run
+            </Button>
+          </VStack>
+        </form>
+      </Container>
+    </Center>
+  );
 }
